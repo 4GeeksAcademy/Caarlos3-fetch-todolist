@@ -4,6 +4,29 @@ const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
 
+    const getToDoListUser = () => {
+
+        fetch("https://playground.4geeks.com/todo/users/caarlos3", {
+
+            method: "POST",
+            body: JSON.stringify([]),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+        .then(resp =>{
+            console.log(resp.ok);
+        })
+        
+        .catch(error =>{
+            console.log(error);
+        });
+        
+        useEffect(() => {
+            getToDoListUser();
+        },[])
+    };
+
     return (
         <div className="container">
             <div className="principal">
