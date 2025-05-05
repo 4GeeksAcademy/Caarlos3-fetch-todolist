@@ -3,28 +3,67 @@ import { useEffect, useState } from "react";
 const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
+    useEffect(() => {
+        listTaskApi();
+    }, [])
 
-    const getToDoListUser = () => {
+    const listTaskApi = () => {
+        fetch("https://playground.4geeks.com/todo/users/caarlos3")
+            .then(resp => {
+                console.log(resp.ok);
+                return resp.json();
+            })
+            .then(data => {
+                setTask(data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
-        fetch("https://playground.4geeks.com/todo/users/caarlos3", {
+
+    const getTask = (inputTask) => {
+
+        fetch("https://playground.4geeks.com/todo/todos/caarlos3", {
 
             method: "POST",
-            body: JSON.stringify([]),
-            headers:{
+            body: JSON.stringify({
+                label: inputTask,
+                done: false
+            }),
+            headers: {
                 "Content-Type": "application/json"
             }
+
         })
-        .then(resp =>{
-            console.log(resp.ok);
+            .then(resp => {
+                console.log(resp.ok);
+                console.log(resp.status);
+                return resp.json();
+            })
+            .then(data => {
+                console.log(data);
+                setTask(prevTask => [...prevTask, data]);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const deleteTask = (id) => {
+
+        fetch(`https://playground.4geeks.com/todo/todos/caarlos3/${id}`, {
+            method: "DELETE"
         })
-        
-        .catch(error =>{
-            console.log(error);
-        });
-        
-        useEffect(() => {
-            getToDoListUser();
-        },[])
+            .then(resp => {
+                if (resp.ok) {
+                    setTask((prevTask)=>prevTask.filter(item => item.id !== id));
+                }
+
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     return (
@@ -33,14 +72,15 @@ const ToDoList = () => {
                 <h1>To-Do List</h1>
                 <input type="text" value={list} onChange={(e) => setList(e.target.value)}
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            setTask(task.concat(list));
-                            setList("")
+                        if (e.key === "Enter" && list.trim() !== "") {
+                            getTask(list.trim());
+                            setList("");
+
                         }
                     }} placeholder="Escribe tu tarea aquí..." />
                 <ul>
-                    {task.map((item, index) => (
-                        <li key={index} onClick={() => setTask(task.filter((item, currentIndex) => currentIndex !== index))}>{item}</li>
+                    {task.map((item) => (
+                        <li key={item.id} onClick={() => deleteTask(item.id)}>{item.label}</li>
                     ))}
                 </ul>
             </div>
