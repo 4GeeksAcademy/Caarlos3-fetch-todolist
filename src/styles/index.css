@@ -24,11 +24,9 @@ input{
 
 li{
     list-style: none;
-    
     background-color: white;
     border-radius: 20px;
-    margin-top: 10px;
-    
+    margin-top: 10px; 
 }
 
 ul{

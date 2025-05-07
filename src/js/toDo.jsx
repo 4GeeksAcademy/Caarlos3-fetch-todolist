@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
-    useEffect(() => {
-        listTaskApi();
-    }, [])
+
 
     const listTaskApi = () => {
         fetch("https://playground.4geeks.com/todo/users/caarlos3")
@@ -14,7 +12,7 @@ const ToDoList = () => {
                 return resp.json();
             })
             .then(data => {
-                setTask(data);
+                setTask(data.todos);
             })
             .catch(error => {
                 console.log(error);
@@ -51,20 +49,26 @@ const ToDoList = () => {
     }
 
     const deleteTask = (id) => {
-
-        fetch(`https://playground.4geeks.com/todo/todos/caarlos3/${id}`, {
-            method: "DELETE"
+        fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+            method: "DELETE",
         })
             .then(resp => {
                 if (resp.ok) {
-                    setTask((prevTask)=>prevTask.filter(item => item.id !== id));
+                    setTask(prevTask => prevTask.filter(item => item.id !== id));
                 }
 
             })
             .catch(error => {
                 console.log(error);
             });
-    };
+
+    }
+
+    useEffect(() => {
+        listTaskApi();
+    }, []);
+
+
 
     return (
         <div className="container">
@@ -80,7 +84,7 @@ const ToDoList = () => {
                     }} placeholder="Escribe tu tarea aquí..." />
                 <ul>
                     {task.map((item) => (
-                        <li key={item.id} onClick={() => deleteTask(item.id)}>{item.label}</li>
+                        <li key={item.id} onClick={() => deleteTask(item.id)} >{item.label} <i class="far fa-trash"></i></li>
                     ))}
                 </ul>
             </div>
