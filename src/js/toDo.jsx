@@ -4,6 +4,22 @@ const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
 
+    const addUser = () =>{
+        fetch(https://playground.4geeks.com/todo/users/caarlos3', {
+
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            })
+            .then(resp => {
+                console.log(resp.ok);
+                return resp.json();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
 
     const listTaskApi = () => {
         fetch("https://playground.4geeks.com/todo/users/caarlos3")
@@ -65,6 +81,7 @@ const ToDoList = () => {
     }
 
     useEffect(() => {
+        addUser();
         listTaskApi();
     }, []);
 
