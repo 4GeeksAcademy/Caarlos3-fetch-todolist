@@ -3,13 +3,20 @@ import { useEffect, useState } from "react";
 const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
+    const username = "caarlos3"
 
-    const addUser = () =>{
-        fetch(https://playground.4geeks.com/todo/users/caarlos3', {
+    const addUser = () => {
+        fetch('https://playground.4geeks.com/todo/users', {
 
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
+
+            },
+            
+            body: JSON.stringify({
+                    name: username
+                })
             })
             .then(resp => {
                 console.log(resp.ok);
@@ -22,7 +29,7 @@ const ToDoList = () => {
 
 
     const listTaskApi = () => {
-        fetch("https://playground.4geeks.com/todo/users/caarlos3")
+        fetch(`https://playground.4geeks.com/todo/users/${username}`)
             .then(resp => {
                 console.log(resp.ok);
                 return resp.json();
@@ -38,12 +45,13 @@ const ToDoList = () => {
 
     const getTask = (inputTask) => {
 
-        fetch("https://playground.4geeks.com/todo/todos/caarlos3", {
+        fetch("https://playground.4geeks.com/todo/todos", {
 
             method: "POST",
             body: JSON.stringify({
                 label: inputTask,
-                done: false
+                done: false,
+                user_id: username
             }),
             headers: {
                 "Content-Type": "application/json"
@@ -101,7 +109,7 @@ const ToDoList = () => {
                     }} placeholder="Escribe tu tarea aquí..." />
                 <ul>
                     {task.map((item) => (
-                        <li key={item.id} onClick={() => deleteTask(item.id)} >{item.label} <i class="far fa-trash"></i></li>
+                        <li key={item.id} onClick={() => deleteTask(item.id)} >{item.label} <i className="far fa-trash"></i></li>
                     ))}
                 </ul>
             </div>
