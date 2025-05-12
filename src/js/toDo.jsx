@@ -3,33 +3,11 @@ import { useEffect, useState } from "react";
 const ToDoList = () => {
     const [list, setList] = useState("");
     const [task, setTask] = useState([]);
-    const username = "caarlos3"
 
-    const addUser = () => {
-        fetch('https://playground.4geeks.com/todo/users', {
-
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-
-            },
-            
-            body: JSON.stringify({
-                    name: username
-                })
-            })
-            .then(resp => {
-                console.log(resp.ok);
-                return resp.json();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
 
 
     const listTaskApi = () => {
-        fetch(`https://playground.4geeks.com/todo/users/${username}`)
+        fetch(`https://playground.4geeks.com/todo/users/test95`)
             .then(resp => {
                 console.log(resp.ok);
                 return resp.json();
@@ -45,13 +23,12 @@ const ToDoList = () => {
 
     const getTask = (inputTask) => {
 
-        fetch("https://playground.4geeks.com/todo/todos", {
+        fetch(`https://playground.4geeks.com/todo/todos/test95`, {
 
             method: "POST",
             body: JSON.stringify({
                 label: inputTask,
-                done: false,
-                user_id: username
+                done: false
             }),
             headers: {
                 "Content-Type": "application/json"
@@ -89,9 +66,10 @@ const ToDoList = () => {
     }
 
     useEffect(() => {
-        addUser();
         listTaskApi();
     }, []);
+
+
 
 
 
